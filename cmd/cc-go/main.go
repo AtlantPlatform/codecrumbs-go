@@ -16,10 +16,16 @@ import (
 	"github.com/AtlantPlatform/codecrumbs-go/renderer"
 )
 
-var app = cli.App("cc-go", "Learn, design or document codebase by putting breadcrumbs in source code.")
+var app = cli.App("cc-go", "Learn, design or document codebase by putting breadcrumbs in source code.\n\n"+
+	`
+ _  _  __  _   ___
+(__(__    (_/_(_) 
+         .-/      
+        (_/       
+`)
 
 var (
-	projectName  = app.StringOpt("p project", "cc-go/projectname", "Specify project prefix on GitHub (for GFM) or just a name.")
+	projectName  = app.StringOpt("p project", "ProjectName", "Specify project prefix on GitHub (for GFM) or just a name.")
 	projectDir   = app.StringOpt("d dir", "", "Project directory path containing augmented source code.")
 	projectEntry = app.StringOpt("e entry", "", "Entrypoint file that is likely the source of main codecrumbs trails.")
 	sourcePrefix = app.StringOpt("prefix", "", "Source prefix for the file paths referenced in the documentation.")
