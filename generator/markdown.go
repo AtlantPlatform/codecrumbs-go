@@ -57,7 +57,7 @@ func (m *Markdown) RenderDocument(
 		statsTotal++
 	}
 
-	fmt.Fprintf(buf, "# %s ~ CodeCrumbs\n\n", strings.Title(m.ProjectName))
+	fmt.Fprintf(buf, "# %s\n\n", strings.Title(m.ProjectName))
 
 	fmt.Fprintf(buf, "❓ This document has been generated using [cc-go](https://github.com/AtlantPlatform/codecrumbs-go)"+
 		" tool. Running for **%s** project it found **%d** codecrumbs in total. There are **%d** main trails of codecrumbs,"+
@@ -118,7 +118,7 @@ func (m *Markdown) RenderDocument(
 		fmt.Fprintf(buf, "### %s\n\n", strings.Title(trailName))
 
 		fmt.Fprintf(buf, "~~~\n")
-		fmt.Fprintf(buf, "%s\n", treeForTrail(trail))
+		fmt.Fprintf(buf, "%s", treeForTrail(trail))
 		fmt.Fprintf(buf, "~~~\n\n")
 
 		for _, cc := range trail {

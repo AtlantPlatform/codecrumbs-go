@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	cli "github.com/jawher/mow.cli"
@@ -27,6 +28,8 @@ var app = cli.App("cc-go", "Learn, design or document codebase by putting breadc
 var (
 	projectName  = app.StringOpt("p project", "ProjectName", "Specify project prefix on GitHub (for GFM) or just a name.")
 	projectDir   = app.StringOpt("d dir", "", "Project directory path containing augmented source code.")
+	excludePaths = app.StringsOpt("exclude", nil, "Exclude specfic path prefixes (e.g. vendor).")
+	includePaths = app.StringsOpt("include", nil, "Include path prefixes.")
 	projectEntry = app.StringOpt("e entry", "", "Entrypoint file that is likely the source of main codecrumbs trails.")
 	sourcePrefix = app.StringOpt("prefix", "", "Source prefix for the file paths referenced in the documentation.")
 	outputFormat = app.StringOpt("f format", "markdown", "The format of output to produce. Available: markdown, json.")
@@ -54,12 +57,29 @@ func main() {
 		}
 
 		crumbsList := make([][]*parser.CodeCrumb, 0)
-		err := filepath.Walk(*projectDir, func(path string, info os.FileInfo, err error) error {
+		excludeRxs, err := compileRxs(*excludePaths)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		err = filepath.Walk(*projectDir, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return err
-			} else if info.IsDir() {
+			}
+
+			relativePath := strings.TrimPrefix(path, *projectDir)
+			isIncluded := containsPrefix(relativePath, *includePaths)
+			if info.IsDir() {
+				if isMatching(relativePath, excludeRxs) {
+					return filepath.SkipDir
+				}
+				return nil
+			} else if isMatching(relativePath, excludeRxs) {
 				return nil
 			}
+			if len(*includePaths) > 0 && !isIncluded {
+				return nil
+			}
+
 			commentLineLang, ok := parser.LanguageFor(filepath.Ext(path))
 			if !ok {
 				return nil
@@ -70,7 +90,6 @@ func main() {
 				return nil
 			}
 			defer f.Close()
-			relativePath := strings.TrimPrefix(path, *projectDir)
 			crumbs, err := parser.CollectCrumbs(relativePath, commentLineLang, f)
 			if err != nil {
 				log.WithFields(log.Fields{
@@ -178,4 +197,37 @@ func cmdRender(c *cli.Cmd) {
 			}
 		}
 	}
+}
+
+func isMatching(path string, rxs []*regexp.Regexp) bool {
+	for _, rx := range rxs {
+		if rx.MatchString(path) {
+			return true
+		}
+	}
+	return false
+}
+
+func compileRxs(rxs []string) ([]*regexp.Regexp, error) {
+	var compiled []*regexp.Regexp
+	for _, rx := range rxs {
+		r, err := regexp.Compile(rx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse Regexp: %s error: %v", rx, err)
+		}
+		compiled = append(compiled, r)
+	}
+	return compiled, nil
+}
+
+func containsPrefix(path string, prefixes []string) bool {
+	for _, p := range prefixes {
+		if p == "..." {
+			return true
+		}
+		if strings.HasPrefix(path, p) {
+			return true
+		}
+	}
+	return false
 }

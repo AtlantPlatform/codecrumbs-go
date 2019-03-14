@@ -42,6 +42,15 @@ func init() {
 		},
 	})
 	addLang(LanguageDefinition{
+		Name: "Solidity",
+		Extensions: []string{
+			".sol",
+		},
+		Regexps: []string{
+			`^\s*//\s?`,
+		},
+	})
+	addLang(LanguageDefinition{
 		Name: "Javascript",
 		Extensions: []string{
 			".js", ".jsx",
@@ -72,6 +81,15 @@ func init() {
 		Name: "Python",
 		Extensions: []string{
 			".py",
+		},
+		Regexps: []string{
+			`^\s*#\s?`,
+		},
+	})
+	addLang(LanguageDefinition{
+		Name: "YAML",
+		Extensions: []string{
+			".yml", ".yaml",
 		},
 		Regexps: []string{
 			`^\s*#\s?`,

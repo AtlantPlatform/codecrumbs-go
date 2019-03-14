@@ -116,8 +116,8 @@ func (cc *CodeCrumb) ParseCC(line []byte) {
 	peekNum, _ := strconv.Atoi(string(bytes.TrimSpace(ccParts[currentIdx])))
 	if peekNum > 0 {
 		cc.PeekNum = peekNum
+		currentIdx++
 	}
-	currentIdx++
 
 	cc.DescLines = append(cc.DescLines, string(bytes.TrimSpace(ccParts[currentIdx])))
 }
