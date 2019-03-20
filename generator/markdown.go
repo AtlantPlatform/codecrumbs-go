@@ -27,6 +27,22 @@ func NewMarkdownGenerator(projectName, projectEntry, sourcePrefix string) *Markd
 	}
 }
 
+func joinPrefixPath(prefix, path string) string {
+	if strings.HasPrefix(prefix, "https://github.com") {
+		prefix = strings.TrimPrefix(prefix, "https://")
+		prefix = strings.TrimSuffix(prefix, "/")
+		prefixParts := strings.Split(prefix, "/")
+		if len(prefixParts) == 2 {
+			pathParts := strings.Split(path, "/")
+			repoName := pathParts[0]
+			path = strings.Join(pathParts[1:], "/")
+			return fmt.Sprintf("https://%s/%s/blob/master/%s", prefix, repoName, path)
+		}
+		return fmt.Sprintf("https://%s/blob/master/%s", prefix, path)
+	}
+	return prefix + path
+}
+
 func (m *Markdown) RenderDocument(
 	mainTrails map[string][]*parser.CodeCrumb,
 	sideTrails map[string][]*parser.CodeCrumb,
@@ -137,8 +153,8 @@ func (m *Markdown) RenderDocument(
 				}
 				fmt.Fprintf(buf, "\n")
 			}
-			fmt.Fprintf(buf, "📖 [%s:%d](%s%s#L%d)\n\n",
-				cc.SourcePath, cc.SourceLine, m.SourcePrefix, cc.SourcePath, cc.SourceLine)
+			fmt.Fprintf(buf, "📖 [%s:%d](%s#L%d)\n\n",
+				cc.SourcePath, cc.SourceLine, joinPrefixPath(m.SourcePrefix, cc.SourcePath), cc.SourceLine)
 			if len(cc.PeekedLines) > 0 {
 				lines, modified := trimTabPrefix(cc.PeekedLines)
 				for modified {
@@ -186,8 +202,8 @@ func (m *Markdown) RenderDocument(
 				}
 				fmt.Fprintf(buf, "\n")
 			}
-			fmt.Fprintf(buf, "📖 [%s:%d](%s%s#L%d)\n\n",
-				cc.SourcePath, cc.SourceLine, m.SourcePrefix, cc.SourcePath, cc.SourceLine)
+			fmt.Fprintf(buf, "📖 [%s:%d](%s#L%d)\n\n",
+				cc.SourcePath, cc.SourceLine, joinPrefixPath(m.SourcePrefix, cc.SourcePath), cc.SourceLine)
 			if len(cc.PeekedLines) > 0 {
 				lines, modified := trimTabPrefix(cc.PeekedLines)
 				for modified {
