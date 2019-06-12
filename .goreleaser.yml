@@ -5,6 +5,8 @@ builds:
 - env:
   - GO111MODULE=on
   - CGO_ENABLED=0
+  main: ./cmd/cc-go
+  binary: cc-go
 archive:
   replacements:
     darwin: Darwin
