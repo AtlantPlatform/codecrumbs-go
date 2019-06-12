@@ -4,11 +4,15 @@ An alternative to [codecrumbs.io](https://github.com/Bogdan-Lyashenko/codecrumbs
 
 ### Installation
 
+With Go:
+
 ```
-go get -u github.com/AtlantPlatform/codecrumbs-go/cmd/cc-go
+$ go get -u github.com/AtlantPlatform/codecrumbs-go/cmd/cc-go
 ```
 
-### Project Plans
+Or get a release for your platform from the [releases](https://github.com/AtlantPlatform/codecrumbs-go/releases) section.
+
+### Project Goals
 
 * Be fast and in pure Go;
 * Deliver results in predictable fasion;
@@ -16,10 +20,6 @@ go get -u github.com/AtlantPlatform/codecrumbs-go/cmd/cc-go
 * Rely on external source of code (i.e. redirect user to GitHub or local files).
 
 This project might have an interactive UI in the future, but now it is designed to provide a human readable documentation with code references, using the same syntax of code comments as for the original CodeCrumbs.
-
-### Examples
-
-Example projects and the output can be found in [/examples](/examples).
 
 ### GitHub Rate Limit
 

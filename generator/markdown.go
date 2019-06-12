@@ -28,7 +28,8 @@ func NewMarkdownGenerator(projectName, projectEntry, sourcePrefix string) *Markd
 }
 
 func joinPrefixPath(prefix, path string) string {
-	if strings.HasPrefix(prefix, "https://github.com") {
+	if strings.HasPrefix(prefix, "https://github.com") ||
+		strings.HasPrefix(prefix, "https://gitlab.com") {
 		prefix = strings.TrimPrefix(prefix, "https://")
 		prefix = strings.TrimSuffix(prefix, "/")
 		prefixParts := strings.Split(prefix, "/")
