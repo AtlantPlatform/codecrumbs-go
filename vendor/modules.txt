@@ -1,0 +1,21 @@
+# github.com/google/uuid v1.1.1
+github.com/google/uuid
+# github.com/jawher/mow.cli v1.1.0
+github.com/jawher/mow.cli
+github.com/jawher/mow.cli/internal/container
+github.com/jawher/mow.cli/internal/flow
+github.com/jawher/mow.cli/internal/fsm
+github.com/jawher/mow.cli/internal/lexer
+github.com/jawher/mow.cli/internal/parser
+github.com/jawher/mow.cli/internal/values
+github.com/jawher/mow.cli/internal/matcher
+# github.com/konsorten/go-windows-terminal-sequences v1.0.1
+github.com/konsorten/go-windows-terminal-sequences
+# github.com/sirupsen/logrus v1.4.2
+github.com/sirupsen/logrus
+# github.com/xlab/catcher v0.0.0-20170222110830-4ce3d20cbee2
+github.com/xlab/catcher
+# github.com/xlab/treeprint v0.0.0-20181112141820-a009c3971eca
+github.com/xlab/treeprint
+# golang.org/x/sys v0.0.0-20190422165155-953cdadca894
+golang.org/x/sys/unix
